@@ -6,7 +6,7 @@ The website allows customers to explore fertilizers, seeds, and agricultural pro
 
 ---
 
-## 📌 Project Overview
+## 📌 Project Overvieww
 
 **Shree Ganesh Fertilizers and Pesticides** is a web-based shopping platform designed to make it easier for farmers and customers to browse and purchase agricultural products online.
 
