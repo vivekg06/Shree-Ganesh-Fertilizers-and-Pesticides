@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile – SGG Agro</title>
+<link rel="stylesheet" href="navbar.css">
+<style>
+body { margin: 0; font-family: 'Nunito', Arial, sans-serif; background: #f4fff0; }
+
+.profile-container {
+  max-width: 1100px; margin: 36px auto;
+  display: grid; grid-template-columns: 280px 1fr;
+  gap: 24px; padding: 0 20px;
+}
+
+.profile-sidebar {
+  background: white; border-radius: 16px; padding: 28px 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center;
+  height: fit-content;
+}
+.profile-avatar {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, #43a047, #1b5e20);
+  color: white; display: flex; justify-content: center; align-items: center;
+  font-size: 38px; font-weight: 800; margin: 0 auto 16px;
+}
+.profile-sidebar h2 { margin: 0 0 4px; font-size: 20px; color: #1b5e20; }
+.profile-sidebar p { color: #888; font-size: 13px; margin: 0 0 24px; }
+
+.sidebar-menu button {
+  width: 100%; padding: 11px; margin-bottom: 10px;
+  border: none; border-radius: 9px; background: #f1f8f1;
+  cursor: pointer; font-weight: 700; font-size: 14px;
+  font-family: 'Nunito', sans-serif; color: #333; transition: 0.2s;
+}
+.sidebar-menu button:hover { background: #43a047; color: white; }
+.logout-btn { background: #fdecea !important; color: #c62828 !important; }
+.logout-btn:hover { background: #c62828 !important; color: white !important; }
+
+.profile-content { display: flex; flex-direction: column; gap: 22px; }
+
+.pcard {
+  background: white; border-radius: 16px; padding: 26px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+.pcard h3 { margin: 0 0 18px; color: #1b5e20; font-size: 18px; }
+
+.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.detail-box { background: #f8f9fa; padding: 14px; border-radius: 10px; }
+.detail-box span { display: block; font-size: 11px; color: #999; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.detail-box b { font-size: 15px; color: #333; }
+
+.order-item {
+  background: #f8f9fa; padding: 16px; border-radius: 10px; margin-bottom: 12px;
+}
+.order-item h4 { margin: 0 0 8px; color: #2e7d32; }
+.order-item p { margin: 0 0 4px; font-size: 14px; color: #666; }
+.order-badge {
+  display: inline-block; background: #e8f5e9; color: #2e7d32;
+  font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; margin-top: 6px;
+}
+
+@media(max-width:768px) {
+  .profile-container { grid-template-columns: 1fr; }
+  .details-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR (simplified for profile page) -->
+<header>
+  <div class="navbar-inner">
+    <a href="fertilizer.html" class="brand">
+      <div class="brand-icon">🌿</div>
+      <div class="brand-text">
+        <span class="store-name">Shri Ganesh Gupta</span>
+        <span class="store-tagline">Fertilizers & Pesticides</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="fertilizer.html">🏠 Home</a></li>
+      <li><a href="fertilizer.html#products">🌱 Products</a></li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')">🛒 Cart <span class="cart-badge" id="cartCount"></span></a></li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('order.html')">📦 Orders</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="authButtons" style="display:flex;gap:8px;">
+        <button class="btn-login" onclick="openModal('login')">🔑 Login</button>
+        <a href="register.html" class="btn-register">📝 Register</a>
+      </div>
+      <a href="profile.html" class="btn-account" id="accountButton">👤 My Account</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-bottom-nav">
+  <ul>
+    <li><a href="fertilizer.html"><span class="mb-icon">🏠</span>Home</a></li>
+    <li><a href="fertilizer.html#products"><span class="mb-icon">🌱</span>Products</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')"><span class="mb-icon">🛒</span>Cart</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('order.html')"><span class="mb-icon">📦</span>Orders</a></li>
+    <li><a href="profile.html" class="active"><span class="mb-icon">👤</span>Account</a></li>
+  </ul>
+</nav>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+      <button class="modal-tab" id="tab-forgot" onclick="switchTab('forgot')">Forgot Password</button>
+    </div>
+    <div id="panel-login">
+      <input class="modal-input" type="text" id="loginUser" placeholder="Username">
+      <input class="modal-input" type="password" id="loginPass" placeholder="Password">
+      <a class="forgot-link" onclick="switchTab('forgot')">Forgot Password?</a>
+      <button class="modal-btn-primary" onclick="doLogin()">Login</button>
+    </div>
+    <div id="panel-register" style="display:none;">
+      <input class="modal-input" type="text" id="regName" placeholder="Full Name / Username">
+      <input class="modal-input" type="email" id="regEmail" placeholder="Email Address">
+      <input class="modal-input" type="tel" id="regPhone" placeholder="Phone Number">
+      <input class="modal-input" type="password" id="regPass" placeholder="Create Password">
+      <button class="modal-btn-primary" onclick="doRegister()">Create Account</button>
+    </div>
+    <div id="panel-forgot" style="display:none;">
+      <input class="modal-input" type="text" id="fpUser" placeholder="Your Username">
+      <input class="modal-input" type="password" id="fpNewPass" placeholder="New Password">
+      <input class="modal-input" type="password" id="fpNewPass2" placeholder="Confirm Password">
+      <button class="modal-btn-primary" onclick="doForgotPw()">Reset Password</button>
+    </div>
+    <div class="modal-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="profile-container">
+
+  <div class="profile-sidebar">
+    <div class="profile-avatar" id="avatarLetter">U</div>
+    <h2 id="userName">User Name</h2>
+    <p id="userEmail">user@email.com</p>
+    <div class="sidebar-menu">
+      <button onclick="showSection('personalSection')">👤 Personal Details</button>
+      <button onclick="showSection('ordersSection')">📦 My Orders</button>
+      <button onclick="showSection('addressSection')">📍 Address</button>
+      <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <div class="profile-content">
+    <div class="pcard" id="personalSection">
+      <h3>Personal Details</h3>
+      <div class="details-grid">
+        <div class="detail-box"><span>Full Name</span><b id="fullName">-</b></div>
+        <div class="detail-box"><span>Email</span><b id="email">-</b></div>
+        <div class="detail-box"><span>Phone Number</span><b id="phone">-</b></div>
+        <div class="detail-box"><span>Member Since</span><b>2026</b></div>
+      </div>
+    </div>
+
+    <div class="pcard" id="addressSection" style="display:none;">
+      <h3>Saved Address</h3>
+      <div class="detail-box"><span>Address</span><b id="address">No Address Added</b></div>
+    </div>
+
+    <div class="pcard" id="ordersSection" style="display:none;">
+      <h3>My Orders</h3>
+      <div id="ordersContainer"><p style="color:#999;">No orders placed yet.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="auth.js"></script>
+<script>
+// Check login
+let user = JSON.parse(localStorage.getItem("currentUser"));
+if (!user) {
+  alert("Please login first");
+  window.location.href = "fertilizer.html";
+}
+
+if (user) {
+  document.getElementById("userName").innerText = user.full_name || "User";
+  document.getElementById("userEmail").innerText = user.email || "";
+  document.getElementById("fullName").innerText = user.full_name || "-";
+  document.getElementById("email").innerText = user.email || "-";
+  document.getElementById("phone").innerText = user.phone || "-";
+  document.getElementById("address").innerText = user.address || "No Address Added";
+  document.getElementById("avatarLetter").innerText = (user.full_name || "U").charAt(0).toUpperCase();
+}
+
+function showSection(id) {
+  ["personalSection","ordersSection","addressSection"].forEach(s => document.getElementById(s).style.display = "none");
+  document.getElementById(id).style.display = "block";
+}
+
+// Load orders
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let container = document.getElementById("ordersContainer");
+if (orders.length > 0) {
+  container.innerHTML = orders.map(o => `
+    <div class="order-item">
+      <h4>${o.product || "Product"}</h4>
+      <p>Qty: ${o.quantity || 1} &nbsp;|&nbsp; Total: ₹${o.total || "-"}</p>
+      <span class="order-badge">Order Confirmed</span>
+    </div>`).join("");
+}
+</script>
+</body>
+</html>

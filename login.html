@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+        }
+
+        .login-box{
+            width:350px;
+            background:white;
+            margin:100px auto;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .login-box h2{
+            text-align:center;
+            margin-bottom:20px;
+            color:green;
+        }
+
+        input{
+            width:100%;
+            padding:12px;
+            margin-bottom:15px;
+            border:1px solid #ccc;
+            border-radius:5px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:green;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        #message{
+            margin-top:15px;
+            text-align:center;
+            font-weight:bold;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="login-box">
+
+    <h2>User Login</h2>
+
+    <form id="loginForm">
+
+        <input type="email" id="email" placeholder="Enter Email" required>
+
+        <input type="password" id="password" placeholder="Enter Password" required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+
+document.getElementById("loginForm").addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    fetch("login.php", {
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body: JSON.stringify({
+
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        document.getElementById("message").innerHTML = data.message;
+
+        if(data.success){
+
+            localStorage.setItem("userLoggedIn", "true");
+
+            setTimeout(() => {
+
+                window.location.href = "index.html";
+
+            }, 1000);
+
+        }
+
+    });
+
+});
+
+</script>
+<script>
+
+function checkLogin(page){
+
+    let loggedIn = localStorage.getItem("userLoggedIn");
+
+    if(loggedIn === "true"){
+
+        window.location.href = page;
+
+    }else{
+
+        alert("Please Login First");
+
+        window.location.href = "login.html";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

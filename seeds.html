@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seeds – SGG Agro</title>
+<link rel="stylesheet" href="navbar.css">
+<style>
+body { margin: 0; font-family: 'Nunito', Arial, sans-serif; background: #f4fff0; }
+.page-body { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+h1 { text-align: center; color: #2e7d32; margin-bottom: 30px; font-size: 28px; }
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white; padding: 20px; border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08); text-align: center;
+  transition: 0.25s; border: 2px solid transparent;
+}
+.card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.14); border-color: #43a047; }
+.card img { width: 100%; height: 170px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
+.card-emoji { font-size: 50px; margin: 10px 0; }
+.card h3 { color: #2e7d32; margin: 0 0 8px; font-size: 17px; }
+.card p { color: #666; font-size: 13px; margin: 0 0 14px; }
+
+.view-btn {
+  background: linear-gradient(135deg, #43a047, #1b5e20); color: white; border: none;
+  padding: 10px 20px; border-radius: 8px; cursor: pointer;
+  font-weight: 800; font-family: 'Nunito', sans-serif; font-size: 14px; transition: opacity 0.2s;
+}
+.view-btn:hover { opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar-inner">
+    <a href="fertilizer.html" class="brand">
+      <div class="brand-icon">🌿</div>
+      <div class="brand-text">
+        <span class="store-name">Shri Ganesh Gupta</span>
+        <span class="store-tagline">Fertilizers & Pesticides</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="fertilizer.html">🏠 Home</a></li>
+      <li><a href="fertilizer.html#products">🌱 Products</a></li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')">🛒 Cart <span class="cart-badge" id="cartCount"></span></a></li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('order.html')">📦 Orders</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="authButtons" style="display:flex;gap:8px;">
+        <button class="btn-login" onclick="openModal('login')">🔑 Login</button>
+        <a href="register.html" class="btn-register">📝 Register</a>
+      </div>
+      <a href="profile.html" class="btn-account" id="accountButton" style="display:none;">👤 My Account</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-bottom-nav">
+  <ul>
+    <li><a href="fertilizer.html"><span class="mb-icon">🏠</span>Home</a></li>
+    <li><a href="fertilizer.html#products" class="active"><span class="mb-icon">🌱</span>Products</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')"><span class="mb-icon">🛒</span>Cart</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('order.html')"><span class="mb-icon">📦</span>Orders</a></li>
+    <li><a href="javascript:void(0)" onclick="localStorage.getItem('loggedInUser') ? window.location.href='profile.html' : openModal('login')"><span class="mb-icon">👤</span>Account</a></li>
+  </ul>
+</nav>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+      <button class="modal-tab" id="tab-forgot" onclick="switchTab('forgot')">Forgot Password</button>
+    </div>
+    <div id="panel-login">
+      <input class="modal-input" type="text" id="loginUser" placeholder="Username">
+      <input class="modal-input" type="password" id="loginPass" placeholder="Password">
+      <a class="forgot-link" onclick="switchTab('forgot')">Forgot Password?</a>
+      <button class="modal-btn-primary" onclick="doLogin()">Login</button>
+    </div>
+    <div id="panel-register" style="display:none;">
+      <input class="modal-input" type="text" id="regName" placeholder="Full Name / Username">
+      <input class="modal-input" type="email" id="regEmail" placeholder="Email Address">
+      <input class="modal-input" type="tel" id="regPhone" placeholder="Phone Number">
+      <input class="modal-input" type="password" id="regPass" placeholder="Create Password">
+      <button class="modal-btn-primary" onclick="doRegister()">Create Account</button>
+    </div>
+    <div id="panel-forgot" style="display:none;">
+      <input class="modal-input" type="text" id="fpUser" placeholder="Your Username">
+      <input class="modal-input" type="password" id="fpNewPass" placeholder="New Password">
+      <input class="modal-input" type="password" id="fpNewPass2" placeholder="Confirm Password">
+      <button class="modal-btn-primary" onclick="doForgotPw()">Reset Password</button>
+    </div>
+    <div class="modal-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<div class="page-body">
+  <h1>🌱 Seeds Collection</h1>
+  <div class="products">
+
+    <div class="card">
+      <img src="images/wheat-seeds-20-kg-1000x1000.webp" alt="Wheat" onerror="this.style.display='none'">
+      <h3>Wheat Seeds</h3><p>High yield wheat seeds.</p>
+      <button class="view-btn" onclick="goProduct('wheat-seed')">View Product</button>
+    </div>
+
+    <div class="card">
+      <img src="images/rice.jpg" alt="Rice" onerror="this.style.display='none'">
+      <h3>Rice Seeds</h3><p>Premium quality rice seeds.</p>
+      <button class="view-btn" onclick="goProduct('rice-seed')">View Product</button>
+    </div>
+
+    <div class="card">
+      <div class="card-emoji">🌽</div>
+      <h3>Maize Seeds</h3><p>Fast growing maize seeds.</p>
+      <button class="view-btn" onclick="goProduct('maize-seed')">View Product</button>
+    </div>
+
+    <div class="card">
+      <div class="card-emoji">🍅</div>
+      <h3>Tomato Seeds</h3><p>Healthy vegetable seeds.</p>
+      <button class="view-btn" onclick="goProduct('tomato-seed')">View Product</button>
+    </div>
+
+    <div class="card">
+      <div class="card-emoji">🥔</div>
+      <h3>Potato Seeds</h3><p>Quality potato farming seeds.</p>
+      <button class="view-btn" onclick="goProduct('potato-seed')">View Product</button>
+    </div>
+
+    <div class="card">
+      <div class="card-emoji">🌶️</div>
+      <h3>Chilli Seeds</h3><p>Spicy chilli hybrid seeds.</p>
+      <button class="view-btn" onclick="goProduct('chilli-seed')">View Product</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+function goProduct(name) {
+  if (!localStorage.getItem("loggedInUser")) {
+    openModal("login");
+    return;
+  }
+  window.location.href = "product.html?name=" + name;
+}
+</script>
+</body>
+</html>

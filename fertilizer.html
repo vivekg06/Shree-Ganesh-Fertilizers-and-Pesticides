@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shri Ganesh Gupta Fertilizers & Pesticides</title>
+<link rel="stylesheet" href="navbar.css">
+<style>
+body {
+  margin: 0;
+  font-family: 'Nunito', Arial, sans-serif;
+  background: #f4fff0;
+  scroll-behavior: smooth;
+}
+
+/* HERO */
+.hero {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 40%, #fff9c4 100%);
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2343a047' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero h1 {
+  font-size: 52px;
+  color: #1b5e20;
+  margin-bottom: 16px;
+  font-weight: 800;
+  position: relative;
+}
+.hero p {
+  font-size: 20px;
+  color: #388e3c;
+  position: relative;
+}
+.hero-btns {
+  display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; justify-content: center;
+  position: relative;
+}
+.hero-btn {
+  padding: 13px 28px; border-radius: 10px; font-size: 15px; font-weight: 800;
+  text-decoration: none; font-family: 'Nunito', sans-serif; cursor: pointer;
+  transition: all 0.2s;
+}
+.hero-btn-primary { background: #2e7d32; color: white; border: none; }
+.hero-btn-primary:hover { background: #1b5e20; transform: translateY(-2px); }
+.hero-btn-secondary { background: white; color: #2e7d32; border: 2px solid #2e7d32; }
+.hero-btn-secondary:hover { background: #f1f8e9; transform: translateY(-2px); }
+
+/* PRODUCTS */
+.section { padding: 60px 20px; text-align: center; }
+.section h2 { font-size: 32px; color: #1b5e20; margin-bottom: 30px; }
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 28px 22px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: 0.25s;
+  position: relative;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  border: 2px solid transparent;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  border-color: #43a047;
+}
+.card-emoji { font-size: 38px; margin-bottom: 12px; }
+.card h3 { margin: 0 0 8px; font-size: 17px; color: #1b5e20; }
+.card p { margin: 0; font-size: 13px; color: #666; line-height: 1.5; }
+.card-tag {
+  display: inline-block; margin-top: 12px;
+  background: #e8f5e9; color: #2e7d32;
+  font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+}
+
+/* ABOUT */
+.about {
+  background: #fffde7;
+  padding: 60px 20px;
+  text-align: center;
+}
+.about h2 { font-size: 30px; color: #1b5e20; margin-bottom: 14px; }
+.about p { font-size: 16px; max-width: 650px; margin: 0 auto; color: #555; line-height: 1.8; }
+.about-stats {
+  display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 30px;
+}
+.stat { background: white; border-radius: 12px; padding: 20px 30px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+.stat h3 { font-size: 30px; color: #2e7d32; margin: 0 0 4px; }
+.stat p { margin: 0; font-size: 13px; color: #777; font-weight: 600; }
+
+/* CONTACT */
+.contact { padding: 60px 20px; text-align: center; }
+.contact h2 { font-size: 30px; color: #1b5e20; margin-bottom: 20px; }
+.contact-info { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+.contact-card {
+  background: white; border-radius: 12px; padding: 22px 30px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08); font-size: 15px; font-weight: 600; color: #333;
+}
+
+/* FOOTER */
+footer {
+  background: #1b5e20;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+}
+
+/* WHATSAPP */
+.whatsapp {
+  position: fixed; bottom: 90px; right: 20px;
+  background: #25D366; color: white;
+  padding: 13px 18px; border-radius: 50px;
+  text-decoration: none; font-weight: 800;
+  box-shadow: 0 5px 20px rgba(37,211,102,0.4);
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; z-index: 100;
+  transition: transform 0.2s;
+}
+.whatsapp:hover { transform: scale(1.05); }
+@media(min-width:901px) { .whatsapp { bottom: 20px; } }
+
+@media(max-width:768px) {
+  .hero h1 { font-size: 34px; }
+  .hero p { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<header>
+  <div class="navbar-inner">
+    <a href="fertilizer.html" class="brand">
+      <div class="brand-icon">🌿</div>
+      <div class="brand-text">
+        <span class="store-name">Shri Ganesh Gupta</span>
+        <span class="store-tagline">Fertilizers & Pesticides</span>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home"><span class="nav-icon">🏠</span> Home</a></li>
+      <li><a href="#products"><span class="nav-icon">🌱</span> Products</a></li>
+      <li><a href="#about"><span class="nav-icon">ℹ️</span> About</a></li>
+      <li><a href="#contact"><span class="nav-icon">📞</span> Contact</a></li>
+      <li>
+        <a href="javascript:void(0)" onclick="checkLogin('cart.html')">
+          <span class="nav-icon">🛒</span> Cart
+          <span class="cart-badge" id="cartCount"></span>
+        </a>
+      </li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('order.html')"><span class="nav-icon">📦</span> Orders</a></li>
+    </ul>
+
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="nav-auth" id="authButtons" style="display:flex;gap:8px;">
+        <button class="btn-login" onclick="openModal('login')">🔑 Login</button>
+        <a href="register.html" class="btn-register">📝 Register</a>
+      </div>
+      <a href="profile.html" class="btn-account" id="accountButton">👤 My Account</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav">
+  <ul>
+    <li><a href="#home"><span class="mb-icon">🏠</span>Home</a></li>
+    <li><a href="#products"><span class="mb-icon">🌱</span>Products</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')"><span class="mb-icon">🛒</span>Cart</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('order.html')"><span class="mb-icon">📦</span>Orders</a></li>
+    <li><a href="javascript:void(0)" onclick="localStorage.getItem('loggedInUser') ? window.location.href='profile.html' : openModal('login')"><span class="mb-icon">👤</span>Account</a></li>
+  </ul>
+</nav>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+      <button class="modal-tab" id="tab-forgot" onclick="switchTab('forgot')">Forgot Password</button>
+    </div>
+
+    <div id="panel-login">
+      <input class="modal-input" type="text" id="loginUser" placeholder="Username">
+      <input class="modal-input" type="password" id="loginPass" placeholder="Password">
+      <a class="forgot-link" onclick="switchTab('forgot')">Forgot Password?</a>
+      <button class="modal-btn-primary" onclick="doLogin()">Login</button>
+      <p style="text-align:center;font-size:13px;margin-top:12px;">No account? <a href="#" onclick="switchTab('register')" style="color:var(--green-main);font-weight:700;">Register here</a></p>
+    </div>
+
+    <div id="panel-register" style="display:none;">
+      <input class="modal-input" type="text" id="regName" placeholder="Full Name / Username">
+      <input class="modal-input" type="email" id="regEmail" placeholder="Email Address">
+      <input class="modal-input" type="tel" id="regPhone" placeholder="Phone Number">
+      <input class="modal-input" type="password" id="regPass" placeholder="Create Password">
+      <button class="modal-btn-primary" onclick="doRegister()">Create Account</button>
+      <p style="text-align:center;font-size:13px;margin-top:12px;">Have account? <a href="#" onclick="switchTab('login')" style="color:var(--green-main);font-weight:700;">Login</a></p>
+    </div>
+
+    <div id="panel-forgot" style="display:none;">
+      <p style="font-size:13px;color:#666;margin:0 0 14px;">Enter your username and set a new password.</p>
+      <input class="modal-input" type="text" id="fpUser" placeholder="Your Username">
+      <input class="modal-input" type="password" id="fpNewPass" placeholder="New Password">
+      <input class="modal-input" type="password" id="fpNewPass2" placeholder="Confirm New Password">
+      <button class="modal-btn-primary" onclick="doForgotPw()">Reset Password</button>
+      <p style="text-align:center;font-size:13px;margin-top:12px;"><a href="#" onclick="switchTab('login')" style="color:var(--green-main);font-weight:700;">← Back to Login</a></p>
+    </div>
+
+    <div class="modal-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <h1>🌾 Healthy Crops • Better Yield</h1>
+  <p>Quality Fertilizers & Crop Protection Products</p>
+  <div class="hero-btns">
+    <a href="#products" class="hero-btn hero-btn-primary">Explore Products</a>
+    <a href="#contact" class="hero-btn hero-btn-secondary">Contact Us</a>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+  <h2>Our Products</h2>
+  <div class="products">
+
+    <a href="javascript:void(0)" onclick="checkLogin('product.html?name=organic-fertilizer')" class="card">
+      <div class="card-emoji">🌾</div>
+      <h3>Organic Fertilizer</h3>
+      <p>Improves soil fertility naturally. Best for wheat, rice and vegetables.</p>
+      <span class="card-tag">Best Seller</span>
+    </a>
+
+    <a href="javascript:void(0)" onclick="checkLogin('product.html?name=npk-fertilizer')" class="card">
+      <div class="card-emoji">🌱</div>
+      <h3>NPK Fertilizer</h3>
+      <p>Balanced nutrients for strong root and plant growth.</p>
+      <span class="card-tag">Popular</span>
+    </a>
+
+    <a href="javascript:void(0)" onclick="checkLogin('product.html?name=insecticide')" class="card">
+      <div class="card-emoji">🐛</div>
+      <h3>Insecticide</h3>
+      <p>Controls aphids, caterpillars and pests effectively.</p>
+      <span class="card-tag">Crop Protection</span>
+    </a>
+
+    <a href="javascript:void(0)" onclick="checkLogin('product.html?name=fungicide')" class="card">
+      <div class="card-emoji">🍃</div>
+      <h3>Fungicide</h3>
+      <p>Protects leaves from spots and fungal diseases.</p>
+      <span class="card-tag">Crop Protection</span>
+    </a>
+
+    <a href="javascript:void(0)" onclick="checkLogin('seeds.html')" class="card">
+      <div class="card-emoji">🌰</div>
+      <h3>Seeds</h3>
+      <p>High quality vegetable, wheat, rice, maize seeds available.</p>
+      <span class="card-tag">New Stock</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <h2>About Shri Ganesh Gupta Fertilizers</h2>
+  <p>With over 20 years of trusted experience, we are committed to nurturing healthier crops and empowering farmers with top-quality agricultural solutions. 🌱</p>
+  <div class="about-stats">
+    <div class="stat"><h3>20+</h3><p>Years Experience</p></div>
+    <div class="stat"><h3>500+</h3><p>Happy Farmers</p></div>
+    <div class="stat"><h3>50+</h3><p>Products</p></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <h2>Contact Us</h2>
+  <div class="contact-info">
+    <div class="contact-card">📞 +91 9720134342</div>
+    <div class="contact-card">📍 Main Market Unchagoan, Bulandshahr</div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Shri Ganesh Gupta Fertilizers & Pesticides. All rights reserved.</p>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/919720134342" target="_blank">💬 WhatsApp</a>
+
+<script src="auth.js"></script>
+</body>
+</html>

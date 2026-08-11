@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Cart – SGG Agro</title>
+<link rel="stylesheet" href="navbar.css">
+<style>
+body { margin: 0; font-family: 'Nunito', Arial, sans-serif; background: linear-gradient(to right, #f1f8e9, #dcedc8); }
+
+.page-body { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+
+h1 { text-align: center; color: #2e7d32; margin-bottom: 30px; font-size: 28px; }
+
+.cart-item {
+  background: white; display: flex; justify-content: space-between;
+  align-items: center; padding: 20px; margin-bottom: 16px;
+  border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  flex-wrap: wrap; gap: 12px;
+}
+.item-info h3 { margin: 0 0 6px; color: #2e7d32; font-size: 17px; }
+.item-info p { margin: 3px 0; color: #555; font-size: 14px; }
+.item-total { font-size: 18px; font-weight: 800; color: #43a047; }
+
+.actions { display: flex; gap: 10px; margin-top: 8px; }
+.remove-btn {
+  background: #e53935; color: white; border: none; padding: 9px 16px;
+  border-radius: 8px; cursor: pointer; font-weight: 700;
+  font-family: 'Nunito', sans-serif; transition: 0.2s;
+}
+.remove-btn:hover { background: #b71c1c; }
+
+.summary {
+  background: white; padding: 26px; border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08); margin-top: 20px; text-align: center;
+}
+.summary h2 { color: #2e7d32; margin-bottom: 20px; }
+
+.checkout-btn {
+  background: linear-gradient(135deg, #43a047, #1b5e20);
+  color: white; border: none; padding: 14px 32px; font-size: 16px;
+  font-weight: 800; border-radius: 10px; cursor: pointer;
+  font-family: 'Nunito', sans-serif; margin: 6px; transition: opacity 0.2s;
+}
+.checkout-btn:hover { opacity: 0.9; }
+.clear-btn {
+  background: #f5f5f5; color: #555; border: none; padding: 14px 24px;
+  font-size: 15px; font-weight: 700; border-radius: 10px; cursor: pointer;
+  font-family: 'Nunito', sans-serif; margin: 6px;
+}
+.clear-btn:hover { background: #e0e0e0; }
+
+.empty-cart { text-align: center; font-size: 20px; color: #888; margin-top: 60px; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #ff9800; color: white; padding: 10px 18px;
+  border-radius: 8px; text-decoration: none; font-weight: 700;
+  font-family: 'Nunito', sans-serif; margin-bottom: 22px; font-size: 14px;
+  transition: background 0.2s;
+}
+.back-link:hover { background: #ef6c00; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar-inner">
+    <a href="fertilizer.html" class="brand">
+      <div class="brand-icon">🌿</div>
+      <div class="brand-text">
+        <span class="store-name">Shri Ganesh Gupta</span>
+        <span class="store-tagline">Fertilizers & Pesticides</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="fertilizer.html">🏠 Home</a></li>
+      <li><a href="fertilizer.html#products">🌱 Products</a></li>
+      <li><a href="cart.html" class="active">🛒 Cart <span class="cart-badge" id="cartCount"></span></a></li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('order.html')">📦 Orders</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="authButtons" style="display:flex;gap:8px;">
+        <button class="btn-login" onclick="openModal('login')">🔑 Login</button>
+        <a href="register.html" class="btn-register">📝 Register</a>
+      </div>
+      <a href="profile.html" class="btn-account" id="accountButton" style="display:none;">👤 My Account</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-bottom-nav">
+  <ul>
+    <li><a href="fertilizer.html"><span class="mb-icon">🏠</span>Home</a></li>
+    <li><a href="fertilizer.html#products"><span class="mb-icon">🌱</span>Products</a></li>
+    <li><a href="cart.html" class="active"><span class="mb-icon">🛒</span>Cart</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('order.html')"><span class="mb-icon">📦</span>Orders</a></li>
+    <li><a href="javascript:void(0)" onclick="localStorage.getItem('loggedInUser') ? window.location.href='profile.html' : openModal('login')"><span class="mb-icon">👤</span>Account</a></li>
+  </ul>
+</nav>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+      <button class="modal-tab" id="tab-forgot" onclick="switchTab('forgot')">Forgot Password</button>
+    </div>
+    <div id="panel-login">
+      <input class="modal-input" type="text" id="loginUser" placeholder="Username">
+      <input class="modal-input" type="password" id="loginPass" placeholder="Password">
+      <a class="forgot-link" onclick="switchTab('forgot')">Forgot Password?</a>
+      <button class="modal-btn-primary" onclick="doLogin()">Login</button>
+    </div>
+    <div id="panel-register" style="display:none;">
+      <input class="modal-input" type="text" id="regName" placeholder="Full Name / Username">
+      <input class="modal-input" type="email" id="regEmail" placeholder="Email Address">
+      <input class="modal-input" type="tel" id="regPhone" placeholder="Phone Number">
+      <input class="modal-input" type="password" id="regPass" placeholder="Create Password">
+      <button class="modal-btn-primary" onclick="doRegister()">Create Account</button>
+    </div>
+    <div id="panel-forgot" style="display:none;">
+      <input class="modal-input" type="text" id="fpUser" placeholder="Your Username">
+      <input class="modal-input" type="password" id="fpNewPass" placeholder="New Password">
+      <input class="modal-input" type="password" id="fpNewPass2" placeholder="Confirm Password">
+      <button class="modal-btn-primary" onclick="doForgotPw()">Reset Password</button>
+    </div>
+    <div class="modal-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<div class="page-body">
+  <a href="fertilizer.html" class="back-link">⬅ Continue Shopping</a>
+  <h1>🛒 My Cart</h1>
+  <div id="cartItems"></div>
+  <div class="summary" id="summary" style="display:none;">
+    <h2 id="grandTotal"></h2>
+    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+    <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+// Check login — redirect if not logged in
+if (!localStorage.getItem("loggedInUser")) {
+  alert("Please login to view your cart.");
+  openModal("login");
+}
+
+var cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+function displayCart() {
+  var cartItems = document.getElementById("cartItems");
+  var summary = document.getElementById("summary");
+  cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  cartItems.innerHTML = "";
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = '<div class="empty-cart">🛒 Your cart is empty.<br><a href="fertilizer.html" style="color:#43a047;font-weight:700;">Shop Now</a></div>';
+    summary.style.display = "none";
+    return;
+  }
+
+  var total = 0;
+  cart.forEach(function(item, index) {
+    var itemTotal = item.price * item.quantity;
+    total += itemTotal;
+    cartItems.innerHTML += '<div class="cart-item">' +
+      '<div class="item-info"><h3>' + item.name + '</h3>' +
+      '<p>Price: ₹' + item.price + ' &nbsp;×&nbsp; Qty: ' + item.quantity + '</p></div>' +
+      '<div><div class="item-total">₹' + itemTotal + '</div>' +
+      '<div class="actions"><button class="remove-btn" onclick="removeItem(' + index + ')">Remove</button></div></div>' +
+      '</div>';
+  });
+
+  summary.style.display = "block";
+  document.getElementById("grandTotal").innerText = "Grand Total: ₹" + total;
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  displayCart();
+  updateCartCount();
+}
+
+function clearCart() {
+  if (confirm("Clear all items from cart?")) {
+    localStorage.removeItem("cart");
+    cart = [];
+    displayCart();
+    updateCartCount();
+  }
+}
+
+function checkout() {
+  if (cart.length === 0) { alert("Cart is empty"); return; }
+  localStorage.setItem("checkout-cart", JSON.stringify(cart));
+  window.location.href = "order.html";
+}
+
+displayCart();
+</script>
+</body>
+</html>

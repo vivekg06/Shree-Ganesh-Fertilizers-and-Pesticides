@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product – SGG Agro</title>
+<link rel="stylesheet" href="navbar.css">
+<style>
+body { margin: 0; font-family: 'Nunito', Arial, sans-serif; background: #f4fff0; }
+.page-body { max-width: 500px; margin: 0 auto; padding: 30px 20px; }
+
+.product-container {
+  background: white; padding: 30px; border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.1); text-align: center;
+}
+.product-container h2 { color: #2e7d32; margin: 0 0 12px; font-size: 24px; }
+.product-container img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 14px; }
+.price { font-weight: 800; font-size: 22px; color: #43a047; margin: 10px 0; }
+.product-container p { color: #555; font-size: 15px; }
+
+.qty-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 16px 0; }
+.qty-row label { font-weight: 700; font-size: 15px; }
+.qty-row input { width: 70px; padding: 9px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-size: 15px; font-family: 'Nunito', sans-serif; text-align: center; }
+
+.action-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+.cart-btn {
+  background: #e8f5e9; color: #2e7d32; border: 2px solid #43a047;
+  padding: 11px 22px; border-radius: 9px; cursor: pointer;
+  font-weight: 800; font-family: 'Nunito', sans-serif; font-size: 14px; transition: 0.2s;
+}
+.cart-btn:hover { background: #c8e6c9; }
+.order-btn {
+  background: linear-gradient(135deg, #43a047, #1b5e20); color: white; border: none;
+  padding: 11px 22px; border-radius: 9px; cursor: pointer;
+  font-weight: 800; font-family: 'Nunito', sans-serif; font-size: 14px; transition: opacity 0.2s;
+}
+.order-btn:hover { opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar-inner">
+    <a href="fertilizer.html" class="brand">
+      <div class="brand-icon">🌿</div>
+      <div class="brand-text">
+        <span class="store-name">Shri Ganesh Gupta</span>
+        <span class="store-tagline">Fertilizers & Pesticides</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="fertilizer.html">🏠 Home</a></li>
+      <li><a href="fertilizer.html#products">🌱 Products</a></li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')">🛒 Cart <span class="cart-badge" id="cartCount"></span></a></li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('order.html')">📦 Orders</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="authButtons" style="display:flex;gap:8px;">
+        <button class="btn-login" onclick="openModal('login')">🔑 Login</button>
+        <a href="register.html" class="btn-register">📝 Register</a>
+      </div>
+      <a href="profile.html" class="btn-account" id="accountButton" style="display:none;">👤 My Account</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-bottom-nav">
+  <ul>
+    <li><a href="fertilizer.html"><span class="mb-icon">🏠</span>Home</a></li>
+    <li><a href="fertilizer.html#products"><span class="mb-icon">🌱</span>Products</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')"><span class="mb-icon">🛒</span>Cart</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('order.html')"><span class="mb-icon">📦</span>Orders</a></li>
+    <li><a href="javascript:void(0)" onclick="localStorage.getItem('loggedInUser') ? window.location.href='profile.html' : openModal('login')"><span class="mb-icon">👤</span>Account</a></li>
+  </ul>
+</nav>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+      <button class="modal-tab" id="tab-forgot" onclick="switchTab('forgot')">Forgot Password</button>
+    </div>
+    <div id="panel-login">
+      <input class="modal-input" type="text" id="loginUser" placeholder="Username">
+      <input class="modal-input" type="password" id="loginPass" placeholder="Password">
+      <a class="forgot-link" onclick="switchTab('forgot')">Forgot Password?</a>
+      <button class="modal-btn-primary" onclick="doLogin()">Login</button>
+    </div>
+    <div id="panel-register" style="display:none;">
+      <input class="modal-input" type="text" id="regName" placeholder="Full Name / Username">
+      <input class="modal-input" type="email" id="regEmail" placeholder="Email Address">
+      <input class="modal-input" type="tel" id="regPhone" placeholder="Phone Number">
+      <input class="modal-input" type="password" id="regPass" placeholder="Create Password">
+      <button class="modal-btn-primary" onclick="doRegister()">Create Account</button>
+    </div>
+    <div id="panel-forgot" style="display:none;">
+      <input class="modal-input" type="text" id="fpUser" placeholder="Your Username">
+      <input class="modal-input" type="password" id="fpNewPass" placeholder="New Password">
+      <input class="modal-input" type="password" id="fpNewPass2" placeholder="Confirm Password">
+      <button class="modal-btn-primary" onclick="doForgotPw()">Reset Password</button>
+    </div>
+    <div class="modal-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="product-container" id="product-container">
+    <p>Loading product...</p>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+// Must be logged in
+if (!localStorage.getItem("loggedInUser")) {
+  alert("Please login to view products.");
+  openModal("login");
+}
+
+var products = {
+  "organic-fertilizer": { name: "Organic Fertilizer", description: "Improves soil fertility naturally. Best for wheat, rice and vegetables.", price: 500, image: "images/rice.jpg" },
+  "npk-fertilizer":     { name: "NPK Fertilizer",     description: "Balanced nutrients for better crop growth and strong roots.", price: 700, image: "images/wheat-seeds-20-kg-1000x1000.webp" },
+  "insecticide":        { name: "Insecticide",         description: "Protect crops from harmful insects. Controls aphids, caterpillars and pests.", price: 400, image: "" },
+  "fungicide":          { name: "Fungicide",           description: "Protection from fungal diseases. Protects leaves from spots and fungus.", price: 450, image: "" },
+  "wheat-seed":         { name: "Wheat Seeds",         description: "Premium wheat seeds for high yield farming.", price: 1200, image: "images/wheat-seeds-20-kg-1000x1000.webp" },
+  "rice-seed":          { name: "Rice Seeds",          description: "Healthy rice seeds for better farming.", price: 1400, image: "images/rice.jpg" },
+  "maize-seed":         { name: "Maize Seeds",         description: "Fast growing maize seeds.", price: 1100, image: "" },
+  "tomato-seed":        { name: "Tomato Seeds",        description: "Hybrid tomato vegetable seeds.", price: 300, image: "" },
+  "potato-seed":        { name: "Potato Seeds",        description: "Best potato farming seeds.", price: 500, image: "" },
+  "chilli-seed":        { name: "Chilli Seeds",        description: "Spicy chilli hybrid seeds.", price: 350, image: "" }
+};
+
+var urlParams = new URLSearchParams(window.location.search);
+var productName = urlParams.get("name");
+var product = products[productName];
+var container = document.getElementById("product-container");
+
+if (product) {
+  var imgHtml = product.image
+    ? '<img src="' + product.image + '" alt="' + product.name + '" onerror="this.style.display=\'none\'">'
+    : '<div style="font-size:60px;margin:20px 0;">🌱</div>';
+
+  container.innerHTML = imgHtml +
+    '<h2>' + product.name + '</h2>' +
+    '<p>' + product.description + '</p>' +
+    '<div class="price">₹' + product.price + '</div>' +
+    '<div class="qty-row"><label>Quantity:</label><input type="number" id="quantity" value="1" min="1"></div>' +
+    '<div class="action-btns">' +
+      '<button class="cart-btn" onclick="addToCart()">🛒 Add to Cart</button>' +
+      '<button class="order-btn" onclick="orderNow()">📦 Order Now</button>' +
+    '</div>';
+} else {
+  container.innerHTML = '<p>Product not found. <a href="fertilizer.html" style="color:#43a047;font-weight:700;">Go back</a></p>';
+}
+
+function addToCart() {
+  var qty = parseInt(document.getElementById("quantity").value) || 1;
+  var cart = JSON.parse(localStorage.getItem("cart") || "[]");
+  cart.push({ name: product.name, price: product.price, quantity: qty });
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
+  alert("✅ Added to cart!");
+}
+
+function orderNow() {
+  var qty = parseInt(document.getElementById("quantity").value) || 1;
+  localStorage.setItem("order-now", JSON.stringify({ name: product.name, price: product.price, quantity: qty }));
+  window.location.href = "order.html";
+}
+</script>
+</body>
+</html>

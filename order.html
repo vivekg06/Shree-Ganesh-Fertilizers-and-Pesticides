@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place Order – SGG Agro</title>
+<link rel="stylesheet" href="navbar.css">
+<style>
+body { margin: 0; font-family: 'Nunito', Arial, sans-serif; background: #f4fff0; }
+.page-body { max-width: 600px; margin: 0 auto; padding: 30px 20px; }
+h1 { text-align: center; color: #2e7d32; margin-bottom: 24px; font-size: 26px; }
+
+.order-card {
+  background: white; border-radius: 16px; padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px;
+}
+.order-card h3 { color: #1b5e20; margin: 0 0 16px; font-size: 16px; }
+
+.o-input, .o-select, .o-textarea {
+  width: 100%; padding: 11px 14px; margin-bottom: 12px;
+  border: 1.5px solid #e0e0e0; border-radius: 9px;
+  font-size: 14px; font-family: 'Nunito', sans-serif;
+  outline: none; transition: border 0.2s; box-sizing: border-box;
+}
+.o-input:focus, .o-select:focus, .o-textarea:focus { border-color: #43a047; }
+.o-textarea { min-height: 80px; resize: vertical; }
+
+.product-box {
+  background: #f8f9fa; border-radius: 10px; padding: 14px; margin-bottom: 12px;
+}
+.product-row { display: flex; gap: 10px; align-items: center; }
+.product-row select { flex: 1; }
+.product-row input[type=number] { width: 80px; flex-shrink: 0; }
+
+.add-more-btn {
+  background: none; border: 2px dashed #43a047; color: #43a047;
+  padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  font-weight: 700; font-family: 'Nunito', sans-serif; width: 100%; margin-bottom: 14px;
+  transition: all 0.2s;
+}
+.add-more-btn:hover { background: #e8f5e9; }
+
+#totalAmount { font-size: 22px; font-weight: 800; color: #2e7d32; text-align: center; margin: 14px 0; }
+
+.place-btn {
+  width: 100%; padding: 13px; background: linear-gradient(135deg, #43a047, #1b5e20);
+  color: white; border: none; border-radius: 10px; font-size: 16px;
+  font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: opacity 0.2s;
+}
+.place-btn:hover { opacity: 0.9; }
+
+#msg { text-align: center; margin-top: 14px; font-size: 15px; font-weight: 700; color: #43a047; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar-inner">
+    <a href="fertilizer.html" class="brand">
+      <div class="brand-icon">🌿</div>
+      <div class="brand-text">
+        <span class="store-name">Shri Ganesh Gupta</span>
+        <span class="store-tagline">Fertilizers & Pesticides</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="fertilizer.html">🏠 Home</a></li>
+      <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')">🛒 Cart <span class="cart-badge" id="cartCount"></span></a></li>
+      <li><a href="order.html" class="active">📦 Orders</a></li>
+      <li><a href="profile.html">👤 Profile</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="authButtons" style="display:flex;gap:8px;">
+        <button class="btn-login" onclick="openModal('login')">🔑 Login</button>
+        <a href="register.html" class="btn-register">📝 Register</a>
+      </div>
+      <a href="profile.html" class="btn-account" id="accountButton" style="display:none;">👤 My Account</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-bottom-nav">
+  <ul>
+    <li><a href="fertilizer.html"><span class="mb-icon">🏠</span>Home</a></li>
+    <li><a href="fertilizer.html#products"><span class="mb-icon">🌱</span>Products</a></li>
+    <li><a href="javascript:void(0)" onclick="checkLogin('cart.html')"><span class="mb-icon">🛒</span>Cart</a></li>
+    <li><a href="order.html" class="active"><span class="mb-icon">📦</span>Orders</a></li>
+    <li><a href="javascript:void(0)" onclick="localStorage.getItem('loggedInUser') ? window.location.href='profile.html' : openModal('login')"><span class="mb-icon">👤</span>Account</a></li>
+  </ul>
+</nav>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="modal-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+      <button class="modal-tab" id="tab-forgot" onclick="switchTab('forgot')">Forgot Password</button>
+    </div>
+    <div id="panel-login">
+      <input class="modal-input" type="text" id="loginUser" placeholder="Username">
+      <input class="modal-input" type="password" id="loginPass" placeholder="Password">
+      <a class="forgot-link" onclick="switchTab('forgot')">Forgot Password?</a>
+      <button class="modal-btn-primary" onclick="doLogin()">Login</button>
+    </div>
+    <div id="panel-register" style="display:none;">
+      <input class="modal-input" type="text" id="regName" placeholder="Full Name / Username">
+      <input class="modal-input" type="email" id="regEmail" placeholder="Email Address">
+      <input class="modal-input" type="tel" id="regPhone" placeholder="Phone Number">
+      <input class="modal-input" type="password" id="regPass" placeholder="Create Password">
+      <button class="modal-btn-primary" onclick="doRegister()">Create Account</button>
+    </div>
+    <div id="panel-forgot" style="display:none;">
+      <input class="modal-input" type="text" id="fpUser" placeholder="Your Username">
+      <input class="modal-input" type="password" id="fpNewPass" placeholder="New Password">
+      <input class="modal-input" type="password" id="fpNewPass2" placeholder="Confirm Password">
+      <button class="modal-btn-primary" onclick="doForgotPw()">Reset Password</button>
+    </div>
+    <div class="modal-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<div class="page-body">
+  <h1>🌾 Place Order</h1>
+
+  <div class="order-card">
+    <h3>📋 Your Details</h3>
+    <input class="o-input" type="text" id="name" placeholder="Your Name" required>
+    <input class="o-input" type="tel" id="phone" placeholder="Phone Number" required>
+    <textarea class="o-textarea" id="address" placeholder="Shipping Address" required></textarea>
+    <select class="o-select" id="payment" required>
+      <option value="">Select Payment Method</option>
+      <option>Cash on Delivery (COD)</option>
+      <option>UPI</option>
+      <option>Credit/Debit Card</option>
+      <option>Net Banking</option>
+    </select>
+  </div>
+
+  <div class="order-card">
+    <h3>🌱 Select Products</h3>
+    <div id="productsContainer">
+      <div class="product-box">
+        <div class="product-row">
+          <select class="o-select product" onchange="calculateTotal()" style="margin-bottom:0;">
+            <option value="500">Organic Fertilizer – ₹500</option>
+            <option value="700">NPK Fertilizer – ₹700</option>
+            <option value="400">Insecticide – ₹400</option>
+            <option value="450">Fungicide – ₹450</option>
+            <option value="1200">Wheat Seeds – ₹1200</option>
+            <option value="1400">Rice Seeds – ₹1400</option>
+            <option value="1100">Maize Seeds – ₹1100</option>
+            <option value="300">Tomato Seeds – ₹300</option>
+            <option value="500">Potato Seeds – ₹500</option>
+            <option value="350">Chilli Seeds – ₹350</option>
+          </select>
+          <input class="o-input" type="number" value="1" min="1" style="margin-bottom:0;width:80px;" oninput="calculateTotal()">
+        </div>
+      </div>
+    </div>
+    <button class="add-more-btn" onclick="addMoreProduct()">+ Add More Products</button>
+    <div id="totalAmount">Total Amount: ₹500</div>
+  </div>
+
+  <button class="place-btn" onclick="placeOrder()">✅ Place Order</button>
+  <p id="msg"></p>
+</div>
+
+<script src="auth.js"></script>
+<script>
+// Check login
+if (!localStorage.getItem("loggedInUser")) {
+  alert("Please login to place an order.");
+  openModal("login");
+}
+
+// Pre-fill user details
+var userData = JSON.parse(localStorage.getItem("currentUser") || "null");
+if (userData) {
+  if (userData.full_name) document.getElementById("name").value = userData.full_name;
+  if (userData.phone && userData.phone !== "Not Added") document.getElementById("phone").value = userData.phone;
+  if (userData.address && userData.address !== "Not Added") document.getElementById("address").value = userData.address;
+}
+
+function addMoreProduct() {
+  var box = document.createElement("div");
+  box.className = "product-box";
+  box.innerHTML = '<div class="product-row">' +
+    '<select class="o-select product" onchange="calculateTotal()" style="margin-bottom:0;">' +
+    '<option value="500">Organic Fertilizer – ₹500</option>' +
+    '<option value="700">NPK Fertilizer – ₹700</option>' +
+    '<option value="400">Insecticide – ₹400</option>' +
+    '<option value="450">Fungicide – ₹450</option>' +
+    '<option value="1200">Wheat Seeds – ₹1200</option>' +
+    '<option value="1400">Rice Seeds – ₹1400</option>' +
+    '<option value="1100">Maize Seeds – ₹1100</option>' +
+    '<option value="300">Tomato Seeds – ₹300</option>' +
+    '<option value="500">Potato Seeds – ₹500</option>' +
+    '<option value="350">Chilli Seeds – ₹350</option>' +
+    '</select>' +
+    '<input class="o-input" type="number" value="1" min="1" style="margin-bottom:0;width:80px;" oninput="calculateTotal()">' +
+    '</div>';
+  document.getElementById("productsContainer").appendChild(box);
+  calculateTotal();
+}
+
+function calculateTotal() {
+  var products = document.querySelectorAll(".product");
+  var qtys = document.querySelectorAll("#productsContainer input[type=number]");
+  var total = 0;
+  products.forEach(function(p, i) {
+    total += parseInt(p.value) * (parseInt(qtys[i].value) || 1);
+  });
+  document.getElementById("totalAmount").innerText = "Total Amount: ₹" + total;
+}
+
+calculateTotal();
+
+<script>
+
+function placeOrder() {
+
+    var name = document.getElementById("name").value.trim();
+    var phone = document.getElementById("phone").value.trim();
+    var address = document.getElementById("address").value.trim();
+    var payment = document.getElementById("payment").value;
+
+    if (!name || !phone || !address || !payment) {
+        alert("Please fill all your details and select payment method.");
+        return;
+    }
+
+    var products = document.querySelectorAll(".product");
+    var qtys = document.querySelectorAll("#productsContainer input[type=number]");
+
+    var items = [];
+    var total = 0;
+
+    products.forEach(function(p, i) {
+
+        var qty = parseInt(qtys[i].value) || 1;
+        var price = parseInt(p.value);
+
+        var productText = p.options[p.selectedIndex].text;
+
+        items.push({
+            product: productText,
+            quantity: qty,
+            subtotal: price * qty
+        });
+
+        total += price * qty;
+    });
+
+
+    // Data that will be sent to PHP
+    var orderData = {
+        name: name,
+        phone: phone,
+        address: address,
+        payment: payment,
+        items: items,
+        totalAmount: total
+    };
+
+
+    // Send order to PHP/MySQL
+    fetch("http://localhost/MyprojectV/order.php", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(orderData)
+
+    })
+
+    .then(function(response) {
+        return response.json();
+    })
+
+    .then(function(data) {
+
+        console.log(data);
+
+        if (data.message && data.message.includes("successfully")) {
+
+            document.getElementById("msg").innerText =
+                "✅ Order placed successfully! We will contact you on " + phone;
+
+            document.getElementById("msg").style.color = "#2e7d32";
+
+            // Save locally also
+            var existingOrders =
+                JSON.parse(localStorage.getItem("orders") || "[]");
+
+            var orderRecord = {
+
+                product: items.map(function(i) {
+                    return i.product;
+                }).join(", "),
+
+                quantity: items.reduce(function(s, i) {
+                    return s + i.quantity;
+                }, 0),
+
+                total: total,
+
+                date: new Date().toLocaleDateString("en-IN"),
+
+                payment: payment
+            };
+
+            existingOrders.push(orderRecord);
+
+            localStorage.setItem(
+                "orders",
+                JSON.stringify(existingOrders)
+            );
+
+            // Clear cart
+            localStorage.removeItem("checkout-cart");
+
+        } else {
+
+            alert("Order failed: " + data.message);
+
+        }
+
+    })
+
+    .catch(function(error) {
+
+        console.error("Error:", error);
+
+        alert(
+            "Could not connect to the server. Make sure XAMPP Apache is running."
+        );
+
+    });
+
+}
+
+</script>
+  existingOrders.push(orderRecord);
+  localStorage.setItem("ostory
+  var user = localStorage.getItem("loggedInUser");
+  if (user) {
+    var userOrders = JSON.parse(localStorage.getItem(user + "_orders") || "[]");
+    userOrders.push("₹" + total + " | " + new Date().toLrders", JSON.stringify(existingOrders));
+
+  // Also save per-user hiocaleDateString("en-IN"));
+    localStorage.setItem(user + "_orders", JSON.stringify(userOrders));
+  }
+
+  document.getElementById("msg").innerText = "✅ Order placed successfully! We will contact you on " + phone;
+  document.getElementById("msg").style.color = "#2e7d32";
+
+  // Clear checkout cart
+  localStorage.removeItem("checkout-cart");
+}
+</script>
+</body>
+</html>

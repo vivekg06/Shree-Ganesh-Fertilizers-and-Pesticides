@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register – SGG Agro</title>
+<link rel="stylesheet" href="navbar.css">
+<style>
+body { margin: 0; font-family: 'Nunito', Arial, sans-serif; background: #f4fff0; }
+
+.register-wrapper {
+  min-height: calc(100vh - 64px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 30px 16px;
+}
+.register-card {
+  background: white; border-radius: 18px; padding: 36px 32px;
+  width: 460px; max-width: 100%;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+}
+.register-card h2 {
+  margin: 0 0 4px; font-size: 24px; color: #1b5e20; text-align: center;
+}
+.register-card .subtitle { text-align: center; color: #888; font-size: 13px; margin-bottom: 24px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.reg-input {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid #e0e0e0; border-radius: 9px;
+  font-size: 14px; font-family: 'Nunito', sans-serif;
+  outline: none; transition: border 0.2s; margin-bottom: 12px; display: block;
+  box-sizing: border-box;
+}
+.reg-input:focus { border-color: #43a047; }
+textarea.reg-input { resize: vertical; min-height: 70px; }
+
+.reg-btn {
+  width: 100%; padding: 13px; margin-top: 4px;
+  background: linear-gradient(135deg, #43a047, #1b5e20);
+  color: white; border: none; border-radius: 10px;
+  font-size: 16px; font-weight: 800; font-family: 'Nunito', sans-serif;
+  cursor: pointer; transition: opacity 0.2s;
+}
+.reg-btn:hover { opacity: 0.9; }
+
+.login-link { text-align: center; margin-top: 16px; font-size: 13px; }
+.login-link a { color: #43a047; font-weight: 700; text-decoration: none; }
+.login-link a:hover { text-decoration: underline; }
+
+#regMsg { text-align: center; font-size: 13px; margin-top: 10px; min-height: 18px; }
+.error { color: #e53935; }
+.success { color: #43a047; }
+
+@media(max-width:500px) { .form-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- SIMPLE HEADER -->
+<header>
+  <div class="navbar-inner">
+    <a href="fertilizer.html" class="brand">
+      <div class="brand-icon">🌿</div>
+      <div class="brand-text">
+        <span class="store-name">Shri Ganesh Gupta</span>
+        <span class="store-tagline">Fertilizers & Pesticides</span>
+      </div>
+    </a>
+    <div id="authButtons" style="display:flex;gap:8px;">
+      <button class="btn-login" onclick="openModal('login')">🔑 Login</button>
+    </div>
+    <a href="profile.html" class="btn-account" id="accountButton">👤 My Account</a>
+  </div>
+</header>
+
+<!-- AUTH MODAL (login only on register page) -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="modal-tab" id="tab-forgot" onclick="switchTab('forgot')">Forgot Password</button>
+    </div>
+    <div id="panel-login">
+      <input class="modal-input" type="text" id="loginUser" placeholder="Username">
+      <input class="modal-input" type="password" id="loginPass" placeholder="Password">
+      <a class="forgot-link" onclick="switchTab('forgot')">Forgot Password?</a>
+      <button class="modal-btn-primary" onclick="doLogin()">Login</button>
+    </div>
+    <div id="panel-register" style="display:none;"></div>
+    <div id="panel-forgot" style="display:none;">
+      <input class="modal-input" type="text" id="fpUser" placeholder="Your Username">
+      <input class="modal-input" type="password" id="fpNewPass" placeholder="New Password">
+      <input class="modal-input" type="password" id="fpNewPass2" placeholder="Confirm Password">
+      <button class="modal-btn-primary" onclick="doForgotPw()">Reset Password</button>
+    </div>
+    <div class="modal-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<div class="register-wrapper">
+  <div class="register-card">
+    <h2>🌱 Create Account</h2>
+    <p class="subtitle">Join Shri Ganesh Gupta Agro Store</p>
+
+    <div class="form-row">
+      <input class="reg-input" type="text" id="full_name" placeholder="Full Name" required>
+      <input class="reg-input" type="tel" id="phone" placeholder="Phone Number" required>
+    </div>
+    <input class="reg-input" type="email" id="email" placeholder="Email Address" required>
+    <input class="reg-input" type="password" id="password" placeholder="Create Password" required>
+    <textarea class="reg-input" id="address" placeholder="Address (optional)"></textarea>
+    <div class="form-row">
+      <input class="reg-input" type="text" id="city" placeholder="City">
+      <input class="reg-input" type="text" id="state" placeholder="State">
+    </div>
+    <input class="reg-input" type="text" id="pincode" placeholder="Pincode">
+
+    <button class="reg-btn" onclick="handleRegister()">Create My Account</button>
+    <div id="regMsg"></div>
+    <div class="login-link">Already have an account? <a href="javascript:void(0)" onclick="closeModal(); openModal('login')">Login here</a></div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+function handleRegister() {
+  const name = document.getElementById("full_name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const pass = document.getElementById("password").value;
+  const address = document.getElementById("address").value.trim();
+  const city = document.getElementById("city").value.trim();
+  const state = document.getElementById("state").value.trim();
+  const pincode = document.getElementById("pincode").value.trim();
+  const msg = document.getElementById("regMsg");
+
+  if (!name || !email || !phone || !pass) {
+    msg.className = "error"; msg.innerText = "Please fill all required fields."; return;
+  }
+
+  const users = JSON.parse(localStorage.getItem("users")) || {};
+  if (users[name]) { msg.className = "error"; msg.innerText = "Username already taken. Try another name."; return; }
+
+  const fullAddress = [address, city, state, pincode].filter(Boolean).join(", ");
+  users[name] = { password: pass, full_name: name, email, phone, address: fullAddress };
+  localStorage.setItem("users", JSON.stringify(users));
+  localStorage.setItem("loggedInUser", name);
+  localStorage.setItem("currentUser", JSON.stringify({ full_name: name, email, phone, address: fullAddress }));
+
+  msg.className = "success"; msg.innerText = "✅ Account created! Redirecting...";
+  setTimeout(() => window.location.href = "fertilizer.html", 1400);
+}
+</script>
+</body>
+</html>
